@@ -1,31 +1,313 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Btoa App V2</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="description" content="BTOA App V4 - Personal Productivity Suite">
+  <meta name="theme-color" content="#007AFF" media="prefers-color-scheme: light">
+  <meta name="theme-color" content="#0a0a0f" media="prefers-color-scheme: dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="BTOA V4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  
+  <title>BTOA App V4</title>
+  
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Btoa App V2</h1>
-            <p>Selamat datang di aplikasi Btoa</p>
-        </header>
-        
-        <main>
-            <section class="content">
-                <h2>Konten Utama</h2>
-                <p>Ini adalah halaman utama aplikasi Btoa V2.</p>
-                <button id="myButton" class="btn">Klik Saya</button>
-            </section>
-        </main>
-        
-        <footer>
-            <p>&copy; 2026 Btoa App V2. Semua hak dilindungi.</p>
-        </footer>
+
+<div id="loading-overlay">
+  <div class="loading-logo">🔐</div>
+  <span class="loading-text">Memuat BTOA V4...</span>
+  <div class="loading-progress"><div class="loading-progress-fill"></div></div>
+</div>
+
+<div id="app">
+
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">🔐</div>
+        <h1>BTOA V4</h1>
+        <p>Personal Productivity Suite</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Masuk</button>
+          <button class="auth-tab" data-tab="register">Daftar</button>
+        </div>
+        <form id="login-form" class="auth-form" onsubmit="return false;">
+          <div class="auth-error" id="login-error"></div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="login-email" placeholder="nama@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kata Sandi</label>
+            <div class="input-group">
+              <input type="password" class="form-input" id="login-password" placeholder="Kata sandi">
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-login">Masuk</button>
+          <div class="auth-divider">atau</div>
+          <button type="button" class="btn btn-secondary">🌐 Masuk dengan Google</button>
+        </form>
+        <form id="register-form" class="auth-form" style="display:none;">
+          <div class="auth-error" id="register-error"></div>
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-input" id="reg-name" placeholder="Nama Anda">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="reg-email" placeholder="nama@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kata Sandi</label>
+            <input type="password" class="form-input" id="reg-password" placeholder="Min. 8 karakter">
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-register">Buat Akun</button>
+        </form>
+      </div>
     </div>
-    
-    <script src="script.js"></script>
+  </div>
+
+  <!-- PIN SCREEN -->
+  <div id="pin-screen" style="display:none;">
+    <div class="pin-title">Masukkan PIN</div>
+    <div class="pin-subtitle">4 digit PIN untuk membuka aplikasi</div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" data-pin="1">1</button>
+      <button class="pin-key" data-pin="2">2<span class="pin-key-letters">ABC</span></button>
+      <button class="pin-key" data-pin="3">3<span class="pin-key-letters">DEF</span></button>
+      <button class="pin-key" data-pin="4">4<span class="pin-key-letters">GHI</span></button>
+      <button class="pin-key" data-pin="5">5<span class="pin-key-letters">JKL</span></button>
+      <button class="pin-key" data-pin="6">6<span class="pin-key-letters">MNO</span></button>
+      <button class="pin-key" data-pin="7">7<span class="pin-key-letters">PQRS</span></button>
+      <button class="pin-key" data-pin="8">8<span class="pin-key-letters">TUV</span></button>
+      <button class="pin-key" data-pin="9">9<span class="pin-key-letters">WXYZ</span></button>
+      <div class="pin-key pin-key-empty"></div>
+      <button class="pin-key" data-pin="0">0</button>
+      <button class="pin-key pin-key-del" data-del="true">⌫</button>
+    </div>
+  </div>
+
+  <!-- MAIN SCREEN -->
+  <div id="main-screen">
+    <div class="page-container">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="dashboard-header">
+          <div>
+            <div class="greeting-text">Selamat Datang 👋</div>
+            <div class="greeting-name" id="greeting-name">Pengguna</div>
+          </div>
+          <button class="avatar-btn" id="avatar-btn">👤</button>
+        </div>
+
+        <div class="balance-card">
+          <div class="balance-label">Total Saldo</div>
+          <div class="balance-amount" id="dash-balance">Rp 0</div>
+          <div class="balance-row">
+            <div class="balance-item">
+              <div class="balance-icon income">📈</div>
+              <div><div class="balance-item-label">Pemasukan</div><div class="balance-item-value" id="dash-income">Rp 0</div></div>
+            </div>
+            <div class="balance-item">
+              <div class="balance-icon expense">📉</div>
+              <div><div class="balance-item-label">Pengeluaran</div><div class="balance-item-value" id="dash-expense">Rp 0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <div class="quick-action" data-module="password"><div class="quick-action-icon" style="background:linear-gradient(135deg,#FF3B30,#FF6B6B)">🔑</div><span class="quick-action-label">Password</span></div>
+          <div class="quick-action" data-module="notes"><div class="quick-action-icon" style="background:linear-gradient(135deg,#007AFF,#409CFF)">📝</div><span class="quick-action-label">Catatan</span></div>
+          <div class="quick-action" data-module="todo"><div class="quick-action-icon" style="background:linear-gradient(135deg,#34C759,#30D158)">✅</div><span class="quick-action-label">Tugas</span></div>
+          <div class="quick-action" data-module="money"><div class="quick-action-icon" style="background:linear-gradient(135deg,#FF9500,#FFCC00)">💰</div><span class="quick-action-label">Transaksi</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" id="stat-passwords">0</div><div class="stat-label">Password</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-notes">0</div><div class="stat-label">Catatan</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-todos">0</div><div class="stat-label">Tugas</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-transactions">0</div><div class="stat-label">Transaksi</div></div>
+        </div>
+
+        <div class="section"><div class="section-header"><span class="section-title">Aktivitas Terbaru</span></div>
+          <div class="list-group" id="recent-activity"></div>
+        </div>
+      </div>
+
+      <!-- PASSWORD PAGE -->
+      <div class="page" id="page-password">
+        <div class="page-header">
+          <div class="page-header-left"><span style="font-size:24px">🔑</span><div><div class="page-title">Password Vault</div><div class="page-subtitle" id="pass-count-label">0 password</div></div></div>
+          <div class="page-header-right"><button class="btn btn-primary btn-sm" id="add-password-btn">+ Tambah</button></div>
+        </div>
+        <div class="folder-scroll" id="password-folders">
+          <div class="folder-chip active">🗂️ Semua</div>
+        </div>
+        <div class="list-group" id="password-list" style="margin:0 16px 24px"></div>
+      </div>
+
+      <!-- NOTES PAGE -->
+      <div class="page" id="page-notes">
+        <div class="page-header">
+          <div class="page-header-left"><span style="font-size:24px">📝</span><div><div class="page-title">Catatan</div><div class="page-subtitle" id="notes-count-label">0 catatan</div></div></div>
+          <div class="page-header-right"><button class="btn btn-primary btn-sm" id="add-note-btn">+ Tambah</button></div>
+        </div>
+        <div class="notes-grid" id="notes-list"></div>
+      </div>
+
+      <!-- TODO PAGE -->
+      <div class="page" id="page-todo">
+        <div class="page-header">
+          <div class="page-header-left"><span style="font-size:24px">✅</span><div><div class="page-title">Todo Manager</div><div class="page-subtitle" id="todo-count-label">0 tugas</div></div></div>
+          <div class="page-header-right"><button class="btn btn-primary btn-sm" id="add-todo-btn">+ Tambah</button></div>
+        </div>
+        <div class="card card-body" style="margin:0 16px">
+          <div class="flex justify-between"><span>Progress</span><span id="todo-progress-pct">0%</span></div>
+          <div class="progress-bar mt-8"><div class="progress-fill" id="todo-progress-bar" style="width:0%"></div></div>
+          <div class="flex justify-between mt-8"><span>✅ Selesai: <b id="todo-done-count">0</b></span><span>⏳ Berjalan: <b id="todo-pending-count">0</b></span></div>
+        </div>
+        <div class="list-group" id="todo-list" style="margin:16px 16px 24px"></div>
+      </div>
+
+      <!-- MONEY PAGE -->
+      <div class="page" id="page-money">
+        <div class="page-header">
+          <div class="page-header-left"><span style="font-size:24px">💰</span><div><div class="page-title">Money Tracker</div><div class="page-subtitle" id="money-period-label">Bulan ini</div></div></div>
+          <div class="page-header-right"><button class="btn btn-primary btn-sm" id="add-transaction-btn">+ Tambah</button></div>
+        </div>
+        <div class="balance-card" style="margin:0 16px">
+          <div class="balance-label">Saldo Bulan Ini</div>
+          <div class="balance-amount" id="money-balance">Rp 0</div>
+          <div class="balance-row">
+            <div class="balance-item"><div class="balance-icon income">📈</div><div><div class="balance-item-label">Pemasukan</div><div class="balance-item-value" id="money-income">Rp 0</div></div></div>
+            <div class="balance-item"><div class="balance-icon expense">📉</div><div><div class="balance-item-label">Pengeluaran</div><div class="balance-item-value" id="money-expense">Rp 0</div></div></div>
+          </div>
+        </div>
+        <div class="list-group" id="money-list" style="margin:16px 16px 24px"></div>
+      </div>
+
+      <!-- MORE PAGE -->
+      <div class="page" id="page-more">
+        <div class="page-header"><div class="page-header-left"><div class="page-title">Lainnya</div></div></div>
+        <div class="list-group" style="margin:0 16px">
+          <div class="list-item" data-page="calendar"><div class="list-icon">📅</div><div class="list-content"><div class="list-title">Kalender Aktivitas</div><div class="list-meta">Lihat semua aktivitas</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item" data-page="settings"><div class="list-icon">⚙️</div><div class="list-content"><div class="list-title">Pengaturan</div><div class="list-meta">Tema, PIN, dan lainnya</div></div><span class="list-chevron">›</span></div>
+        </div>
+        <div class="text-center" style="padding:24px;color:var(--text-tertiary);font-size:12px">BTOA App V4 • Personal Suite</div>
+      </div>
+
+      <!-- CALENDAR PAGE -->
+      <div class="page" id="page-calendar">
+        <div class="page-header">
+          <div class="page-header-left"><button class="btn-icon" data-back="more">‹</button><div class="page-title">Kalender</div></div>
+        </div>
+        <div id="calendar-view" class="text-center" style="padding:24px">📅 Kalender akan tampil di sini</div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <div class="page-header-left"><button class="btn-icon" data-back="more">‹</button><div class="page-title">Pengaturan</div></div>
+        </div>
+        <div class="list-group" style="margin:0 16px">
+          <div class="list-item" id="theme-light"><div class="list-icon">☀️</div><div class="list-content"><div class="list-title">Mode Terang</div></div></div>
+          <div class="list-item" id="theme-dark"><div class="list-icon">🌙</div><div class="list-content"><div class="list-title">Mode Gelap</div></div></div>
+          <div class="list-item" id="toggle-pin-setting"><div class="list-icon">🔒</div><div class="list-content"><div class="list-title">PIN Lock</div></div><div class="toggle" id="pin-toggle"><div class="toggle-thumb"></div></div></div>
+          <div class="list-item" id="logout-btn" style="color:var(--accent-red)"><div class="list-icon">🚪</div><div class="list-content"><div class="list-title" style="color:var(--accent-red)">Keluar</div></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <nav class="nav-bar">
+      <div class="nav-items">
+        <button class="nav-item active" data-nav="dashboard"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></button>
+        <button class="nav-item" data-nav="password"><span class="nav-icon">🔑</span><span class="nav-label">Password</span></button>
+        <button class="nav-item" data-nav="notes"><span class="nav-icon">📝</span><span class="nav-label">Catatan</span></button>
+        <button class="nav-item" data-nav="todo"><span class="nav-icon">✅</span><span class="nav-label">Tugas</span></button>
+        <button class="nav-item" data-nav="money"><span class="nav-icon">💰</span><span class="nav-label">Money</span></button>
+        <button class="nav-item" data-nav="more"><span class="nav-icon">⋯</span><span class="nav-label">Lainnya</span></button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- Password Modal -->
+<div class="modal-overlay" id="modal-password">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header"><span class="sheet-title">Tambah Password</span><button class="sheet-close" onclick="closeModal('modal-password')">✕</button></div>
+    <div class="sheet-body">
+      <div class="form-section">
+        <div class="form-field"><span class="field-label">Situs</span><input class="field-input" id="pass-site" placeholder="Nama situs"></div>
+        <div class="form-field"><span class="field-label">Username</span><input class="field-input" id="pass-username" placeholder="Username/Email"></div>
+        <div class="form-field"><span class="field-label">Password</span><input class="field-input" id="pass-password" type="password" placeholder="Password"></div>
+      </div>
+      <button class="btn btn-primary" id="save-password-btn">Simpan Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay" id="modal-note">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header"><span class="sheet-title">Tambah Catatan</span><button class="sheet-close" onclick="closeModal('modal-note')">✕</button></div>
+    <div class="sheet-body">
+      <div class="form-section">
+        <div class="form-field"><input class="field-input" id="note-title" placeholder="Judul catatan" style="text-align:left"></div>
+        <div class="form-field" style="flex-direction:column"><textarea class="field-textarea" id="note-content" placeholder="Tulis catatan..." rows="5"></textarea></div>
+      </div>
+      <button class="btn btn-primary" id="save-note-btn">Simpan Catatan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Todo Modal -->
+<div class="modal-overlay" id="modal-todo">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header"><span class="sheet-title">Tambah Tugas</span><button class="sheet-close" onclick="closeModal('modal-todo')">✕</button></div>
+    <div class="sheet-body">
+      <div class="form-section">
+        <div class="form-field"><input class="field-input" id="todo-title" placeholder="Nama tugas" style="text-align:left"></div>
+        <div class="form-field"><span class="field-label">Prioritas</span><select class="field-input" id="todo-priority"><option value="high">🔴 Tinggi</option><option value="medium" selected>🟠 Sedang</option><option value="low">🟢 Rendah</option></select></div>
+      </div>
+      <button class="btn btn-primary" id="save-todo-btn">Simpan Tugas</button>
+    </div>
+  </div>
+</div>
+
+<!-- Money Modal -->
+<div class="modal-overlay" id="modal-money">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header"><span class="sheet-title">Tambah Transaksi</span><button class="sheet-close" onclick="closeModal('modal-money')">✕</button></div>
+    <div class="sheet-body">
+      <div class="form-section">
+        <div class="form-field"><span class="field-label">Jumlah</span><input class="field-input" id="money-amount" type="number" placeholder="0"></div>
+        <div class="form-field"><span class="field-label">Kategori</span><select class="field-input" id="money-category"><option value="Makanan">🍔 Makanan</option><option value="Transport">🚗 Transport</option><option value="Belanja">🛍️ Belanja</option><option value="Tagihan">💡 Tagihan</option><option value="Pemasukan">💵 Pemasukan</option></select></div>
+        <div class="form-field"><span class="field-label">Tipe</span><select class="field-input" id="money-type"><option value="expense">Pengeluaran</option><option value="income">Pemasukan</option></select></div>
+      </div>
+      <button class="btn btn-primary" id="save-money-btn">Simpan Transaksi</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
